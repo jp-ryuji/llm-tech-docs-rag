@@ -1,4 +1,3 @@
-import json
 from typing import Dict, List
 
 
@@ -33,11 +32,11 @@ class RAGEvaluator:
         return [
             {
                 "question": "How do I create a basic FastAPI application?",
-                "expected_keywords": ["FastAPI", "app", "uvicorn", "@app.get"]
+                "expected_keywords": ["FastAPI", "app", "uvicorn", "@app.get"],
             },
             {
                 "question": "How do I handle path parameters?",
-                "expected_keywords": ["path", "parameter", "{item_id}", "int"]
+                "expected_keywords": ["path", "parameter", "{item_id}", "int"],
             },
             # NOTE: Add more test cases if needed
         ]
@@ -71,15 +70,18 @@ class RAGEvaluator:
 
             # Simple keyword-based evaluation
             answer_text = response["answer"].lower()
-            keyword_matches = sum(1 for kw in case["expected_keywords"] 
-                                if kw.lower() in answer_text)
+            keyword_matches = sum(
+                1 for kw in case["expected_keywords"] if kw.lower() in answer_text
+            )
 
-            results.append({
-                "question": case["question"],
-                "answer": response["answer"],
-                "confidence": response["confidence"],
-                "keyword_score": keyword_matches / len(case["expected_keywords"]),
-                "sources_count": len(response["sources"])
-            })
+            results.append(
+                {
+                    "question": case["question"],
+                    "answer": response["answer"],
+                    "confidence": response["confidence"],
+                    "keyword_score": keyword_matches / len(case["expected_keywords"]),
+                    "sources_count": len(response["sources"]),
+                }
+            )
 
         return results
