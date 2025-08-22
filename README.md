@@ -99,3 +99,8 @@ This project uses `pyproject.toml` for dependency management with uv.
 ### Additional Development Information
 
 For more detailed development information, please refer to [Development Documentation](docs/development.md).
+
+### Code Quality
+
+This project uses pre-commit hooks to ensure code quality and consistency.
+The hooks will automatically run on every commit. For more details, see [Linting Documentation](docs/linting.md).
