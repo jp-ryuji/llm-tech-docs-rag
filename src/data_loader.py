@@ -32,11 +32,13 @@ class DocumentLoader:
             try:
                 docs = md_reader.load_data(file=str(md_file))
                 for doc in docs:
-                    doc.metadata.update({
-                        "source": str(md_file),
-                        "file_type": "markdown",
-                        "section": self._extract_section(md_file)
-                    })
+                    doc.metadata.update(
+                        {
+                            "source": str(md_file),
+                            "file_type": "markdown",
+                            "section": self._extract_section(md_file),
+                        }
+                    )
                 documents.extend(docs)
             except IOError as e:
                 print(f"Error loading {md_file}: {e}")

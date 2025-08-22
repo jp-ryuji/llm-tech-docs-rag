@@ -1,5 +1,3 @@
-import os
-
 import streamlit as st
 from dotenv import load_dotenv
 from llama_index.core import VectorStoreIndex
@@ -129,11 +127,7 @@ def main():
     Users can input questions about FastAPI documentation and receive
     AI-generated answers with confidence scores and sources.
     """
-    st.set_page_config(
-        page_title="Tech Docs Q&A",
-        page_icon="📚",
-        layout="wide"
-    )
+    st.set_page_config(page_title="Tech Docs Q&A", page_icon="📚", layout="wide")
 
     st.title("📚 Tech Docs Q&A Assistant")
     st.markdown(
@@ -160,7 +154,7 @@ def main():
         question = st.text_area(
             "Your question:",
             placeholder="Example: How do I create a FastAPI endpoint with path parameters?",
-            height=100
+            height=100,
         )
 
         # Search button
@@ -183,7 +177,7 @@ def main():
                 search_clicked = True
 
     # Process query
-    if (question and search_clicked) or (question and st.session_state.get('auto_search', False)):
+    if (question and search_clicked) or (question and st.session_state.get("auto_search", False)):
         with st.spinner("🔍 Searching documentation..."):
             try:
                 result = query_engine.query(question)
@@ -204,13 +198,13 @@ def main():
                     st.subheader("📄 Sources")
                     for i, source in enumerate(result["sources"]):
                         with st.expander(
-                            f"Source {i+1}: {source['section']} "
+                            f"Source {i + 1}: {source['section']} "
                             f"(Relevance: {source['score']:.2f})"
                         ):
                             st.write(f"**File:** `{source['source']}`")
                             st.write(f"**Section:** {source['section']}")
                             st.write("**Content Preview:**")
-                            st.write(source['content'])
+                            st.write(source["content"])
                 else:
                     st.warning("No relevant sources found. Try rephrasing your question.")
 

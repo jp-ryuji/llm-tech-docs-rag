@@ -32,10 +32,7 @@ class SmartQueryEngine:
         these components.
         """
         # Configure retriever
-        retriever = VectorIndexRetriever(
-            index=self.index,
-            similarity_top_k=5
-        )
+        retriever = VectorIndexRetriever(index=self.index, similarity_top_k=5)
 
         # Add post-processor for filtering low-confidence results
         similarity_cutoff = float(os.getenv("SIMILARITY_CUTOFF", 0.6))
@@ -43,8 +40,7 @@ class SmartQueryEngine:
 
         # Create query engine
         self.query_engine = RetrieverQueryEngine(
-            retriever=retriever,
-            node_postprocessors=[postprocessor]
+            retriever=retriever, node_postprocessors=[postprocessor]
         )
 
     def query(self, question: str) -> dict:
@@ -64,31 +60,35 @@ class SmartQueryEngine:
         # Format response with sources
         sources = []
         for node in response.source_nodes:
-            sources.append({
-                "content": node.text[:200] + "...",
-                "source": node.metadata.get("source", "Unknown"),
-                "score": node.score,
-                "section": node.metadata.get("section", "general")
-            })
+            sources.append(
+                {
+                    "content": node.text[:200] + "...",
+                    "source": node.metadata.get("source", "Unknown"),
+                    "score": node.score,
+                    "section": node.metadata.get("section", "general"),
+                }
+            )
 
         # If no sources found, provide a more informative response
         if not sources:
             return {
-                "answer": ("I couldn't find any relevant information in the FastAPI documentation "
-                          "to answer your question. This might be because:\n\n"
-                          "1. The question is too general or not covered in the documentation\n"
-                          "2. The phrasing doesn't match the documentation content\n"
-                          "3. The similarity threshold is too strict for this query\n\n"
-                          "Try asking more specific questions about FastAPI features, or rephrasing "
-                          "your question to match the documentation's terminology."),
+                "answer": (
+                    "I couldn't find any relevant information in the FastAPI documentation "
+                    "to answer your question. This might be because:\n\n"
+                    "1. The question is too general or not covered in the documentation\n"
+                    "2. The phrasing doesn't match the documentation content\n"
+                    "3. The similarity threshold is too strict for this query\n\n"
+                    "Try asking more specific questions about FastAPI features, or rephrasing "
+                    "your question to match the documentation's terminology."
+                ),
                 "sources": [],
-                "confidence": 0.0
+                "confidence": 0.0,
             }
 
         return {
             "answer": str(response),
             "sources": sources,
-            "confidence": self._calculate_confidence(response.source_nodes)
+            "confidence": self._calculate_confidence(response.source_nodes),
         }
 
     def _calculate_confidence(self, source_nodes) -> float:

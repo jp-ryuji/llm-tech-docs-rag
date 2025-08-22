@@ -1,9 +1,14 @@
 from pathlib import Path
 
 import chromadb
-from llama_index.core import (Settings, StorageContext, VectorStoreIndex,
-                              load_index_from_storage)
+from llama_index.core import (
+    Settings,
+    StorageContext,
+    VectorStoreIndex,
+    load_index_from_storage,
+)
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+
 # from llama_index.llms.ollama import Ollama
 from llama_index.llms.openai import OpenAI
 from llama_index.vector_stores.chroma import ChromaVectorStore
@@ -39,9 +44,7 @@ class DocumentIndexer:
             # Settings.llm = Ollama(model="deepseek-r1:latest", temperature=0.1)
             # Settings.llm = Ollama(model="llama3.2:latest", temperature=0.1)
             Settings.llm = OpenAI(model="gpt-4o-mini", temperature=0.1)
-            Settings.embed_model = HuggingFaceEmbedding(
-                model_name="BAAI/bge-small-en-v1.5"
-            )
+            Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
             _SETTINGS_CONFIGURED = True
             print("⚙️ LlamaIndex settings configured")
 
@@ -70,8 +73,7 @@ class DocumentIndexer:
 
             # Load index from storage
             storage_context = StorageContext.from_defaults(
-                vector_store=vector_store,
-                persist_dir=str(self.persist_dir)
+                vector_store=vector_store, persist_dir=str(self.persist_dir)
             )
             index = load_index_from_storage(storage_context)
             print("✅ Successfully loaded existing index from storage")
@@ -101,10 +103,7 @@ class DocumentIndexer:
         storage_context = StorageContext.from_defaults(vector_store=vector_store)
 
         # Create index
-        index = VectorStoreIndex.from_documents(
-            documents,
-            storage_context=storage_context
-        )
+        index = VectorStoreIndex.from_documents(documents, storage_context=storage_context)
 
         # Persist to disk
         self.persist_dir.mkdir(parents=True, exist_ok=True)
