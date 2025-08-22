@@ -1,9 +1,13 @@
-import chromadb
 from pathlib import Path
-from llama_index.core import Settings, VectorStoreIndex, StorageContext, load_index_from_storage
+
+import chromadb
+from llama_index.core import (Settings, StorageContext, VectorStoreIndex,
+                              load_index_from_storage)
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+# from llama_index.llms.ollama import Ollama
 from llama_index.llms.openai import OpenAI
 from llama_index.vector_stores.chroma import ChromaVectorStore
+
 # from llama_index.embeddings.openai import OpenAIEmbedding
 
 # Module-level flag to prevent re-configuration
@@ -32,6 +36,8 @@ class DocumentIndexer:
         global _SETTINGS_CONFIGURED
 
         if not _SETTINGS_CONFIGURED:
+            # Settings.llm = Ollama(model="deepseek-r1:latest", temperature=0.1)
+            # Settings.llm = Ollama(model="llama3.2:latest", temperature=0.1)
             Settings.llm = OpenAI(model="gpt-4o-mini", temperature=0.1)
             Settings.embed_model = HuggingFaceEmbedding(
                 model_name="BAAI/bge-small-en-v1.5"

@@ -171,10 +171,10 @@ def main():
         st.subheader("💡 Example Questions")
         example_questions = [
             "How do I create a basic FastAPI app?",
-            "How do I handle path parameters?",
-            "How do I use query parameters?",
-            "How do I handle request bodies?",
-            "How do I add authentication?",
+            "What are path parameters in FastAPI?",
+            "What are query parameters in FastAPI?",
+            "How do I handle JSON request body?",
+            "Does FastAPI provide swagger?",
         ]
 
         for example in example_questions:
