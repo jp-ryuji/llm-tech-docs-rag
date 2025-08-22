@@ -1,3 +1,5 @@
+import os
+
 from llama_index.core import VectorStoreIndex
 from llama_index.core.postprocessor import SimilarityPostprocessor
 from llama_index.core.query_engine import RetrieverQueryEngine
@@ -36,7 +38,8 @@ class SmartQueryEngine:
         )
 
         # Add post-processor for filtering low-confidence results
-        postprocessor = SimilarityPostprocessor(similarity_cutoff=0.7)
+        similarity_cutoff = float(os.getenv("SIMILARITY_CUTOFF", 0.6))
+        postprocessor = SimilarityPostprocessor(similarity_cutoff=similarity_cutoff)
 
         # Create query engine
         self.query_engine = RetrieverQueryEngine(
@@ -67,6 +70,20 @@ class SmartQueryEngine:
                 "score": node.score,
                 "section": node.metadata.get("section", "general")
             })
+
+        # If no sources found, provide a more informative response
+        if not sources:
+            return {
+                "answer": ("I couldn't find any relevant information in the FastAPI documentation "
+                          "to answer your question. This might be because:\n\n"
+                          "1. The question is too general or not covered in the documentation\n"
+                          "2. The phrasing doesn't match the documentation content\n"
+                          "3. The similarity threshold is too strict for this query\n\n"
+                          "Try asking more specific questions about FastAPI features, or rephrasing "
+                          "your question to match the documentation's terminology."),
+                "sources": [],
+                "confidence": 0.0
+            }
 
         return {
             "answer": str(response),
