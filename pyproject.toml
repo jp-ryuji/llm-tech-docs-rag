@@ -19,6 +19,7 @@ dependencies = [
     "python-dotenv>=1.0.0",
     "tqdm>=4.65.0",
     "streamlit>=1.48.1",
+    "llama-index-llms-ollama>=0.7.1",
 ]
 
 [build-system]
